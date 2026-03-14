@@ -1,17 +1,16 @@
-name: Build APK
+name: Build Plugin
 
 on:
   push:
     branches: [ master ]
-  workflow_dispatch:  # manuel tetikle de çalışsın
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -22,12 +21,12 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    - name: Build Plugin APK
-      run: ./gradlew ExampleProvider:assembleDebug
+    - name: Build Plugin with make task
+      run: ./gradlew ExampleProvider:make
 
-    - name: Upload APK Artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Hianimetvx-APK
-        path: ExampleProvider/build/outputs/apk/debug/*.apk
-        retention-days: 7
+        name: Hianimetvx-Plugin
+        path: ExampleProvider/build/*.apk  # veya .cs3 / .jar ne çıkarsa
+        if-no-files-found: warn  # hata vermesin boşsa
